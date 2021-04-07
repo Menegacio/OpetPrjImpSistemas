@@ -7,13 +7,15 @@ import User from '../../models/User';
 
 interface Request {
   name: string;
-  email: string;
   username: string;
+  email: string;
   password: string;
+  birth_date: string;
+  course_id: string;
 }
 
 class CreateUserService {
-  public async execute({ name, email, username, password }: Request): Promise<User> {
+  public async execute({ name, email, username, password, birth_date, course_id }: Request): Promise<User> {
     const userRepository = getRepository(User);
 
     const checkUserExists = await userRepository.findOne({ where: { email } });
@@ -22,9 +24,24 @@ class CreateUserService {
       throw new AppError('Email addres alredy used');
     }
 
+    const CheckUsernameExists = await userRepository.findOne({ where: {username} });
+
+    if (CheckUsernameExists) {
+      throw new AppError('Username address already used.');
+    }
+
     const hashedPassword = await hash(password, 8);
 
-    const user = userRepository.create({ name, email, username, password: hashedPassword });
+    const userDate = new Date(birth_date);
+
+    const user = userRepository.create({
+      name,
+      email,
+      username,
+      password: hashedPassword,
+      birth_date: userDate,
+      course_id
+    });
 
     await userRepository.save(user);
 

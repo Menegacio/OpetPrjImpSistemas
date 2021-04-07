@@ -1,27 +1,15 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
-@Entity('users')
-class User {
+@Entity('courses')
+class Course {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()
-    name: string;
+    course: string;
 
     @Column()
-    username: string;
-
-    @Column()
-    password: string;
-
-    @Column()
-    email: string;
-
-    @Column()
-    course_id: string;
-
-    @Column('date')
-    birth_date: Date;
+    time_course: number;
 
     @CreateDateColumn()
     created_at: Date;
@@ -30,4 +18,4 @@ class User {
     updated_at: Date;
 }
 
-export default User;
+export default Course;
