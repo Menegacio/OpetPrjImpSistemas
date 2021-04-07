@@ -1,5 +1,5 @@
-import React, { useCallback, useRef } from 'react';
-import { FiArrowLeft, FiUser, FiLock, FiMail, FiUserPlus } from 'react-icons/fi';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FiArrowLeft, FiUser, FiLock, FiMail, FiUserPlus, FiCalendar } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -19,9 +19,17 @@ interface SignUpFormData {
     email: string;
     username: string;
     password: string;
+    birth_date: string;
+}
+
+interface ListAllCourses {
+    id: string;
+    course: string;
 }
 
 const SignUp: React.FC = () => {
+    const [options, setOptions] = useState<ListAllCourses[]>([]);
+    const [courseId, setcourse] = useState('');
     const formRef = useRef<FormHandles>(null);
     const { addToast } = useToast();
     const history = useHistory();
@@ -41,7 +49,11 @@ const SignUp: React.FC = () => {
                 abortEarly: false,
             });
 
-            await api.post('/users', data);
+            const { username, password, name, email, birth_date } = data;
+
+            const birthDate = birth_date + " 00:00:00";
+
+            await api.post('/users', {username, password, name, email, birth_date: birthDate, course_id: courseId});
 
             history.push('/');
 
@@ -65,7 +77,17 @@ const SignUp: React.FC = () => {
                 description: 'Ocorreu um erro ao fazer o seu cadastro, tente novamente.',
             });
         }
-    }, [addToast, history]);
+    }, [addToast, history, courseId]);
+
+    const getCourses = useCallback(async () => {
+        const response = await api.get<ListAllCourses[]>('/courses');
+        console.log(response.data);
+        setOptions(response.data);
+    }, []);
+
+    useEffect(() => {
+        getCourses();
+    }, [getCourses]);
 
     return (
         <Container>
@@ -76,6 +98,13 @@ const SignUp: React.FC = () => {
                         <h1>Faca seu cadastro</h1>
 
                         <Input name='name'  icon={FiUser} placeholder='Nome' />
+                        <Input name='birth_date' icon={FiCalendar} type='date' placeholder='Data de nascimento' />
+                        <select name='course' onChange={(e) => setcourse(e.target.value)}>
+                            <option key='teste' className="course" value='teste'>Selecione seu Curso</option>
+                            {options.map((options, index) => 
+                                <option key={index} className="course" value={options.id}>{options.course}</option>
+                            )}
+                        </select>
                         <Input name='email' icon={FiMail} placeholder='E-mail' />
                         <Input name='username' icon={FiUserPlus} placeholder='Username' />
                         <Input name='password' icon={FiLock} type='password' placeholder='Senha' />
