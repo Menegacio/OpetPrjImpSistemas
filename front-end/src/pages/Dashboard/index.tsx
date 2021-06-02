@@ -1,9 +1,10 @@
 import React from 'react';
 import { FiPower } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 import { useAuth } from '../../hooks/auth';
 
-import { Container, Header, HeaderContenter, Profile } from './styles';
+import { Container, Header, HeaderContenter, Menu } from './styles';
 
 const Dashboard: React.FC = () => {
     const { signOut, user } = useAuth();
@@ -13,12 +14,25 @@ const Dashboard: React.FC = () => {
             <Header>
                 <HeaderContenter>
 
-                    <Profile>
-                        <div>
-                            <span>Bem-vindo,</span>
-                            <strong>{user.name}</strong>
-                        </div>
-                    </Profile>
+                    <Menu>
+                        <nav>
+                            <ul>
+                                <li>
+                                    <Link to="/">
+                                        Home
+                                    </Link>
+                                </li>
+                                {user.isAdmin ? 
+                                    <li>
+                                    <Link to="/users">
+                                        Users
+                                    </Link>
+                                </li>
+                                : ''
+                                }
+                            </ul>
+                        </nav>
+                    </Menu>
 
                     <button type="button" onClick={signOut}>
                         <FiPower />

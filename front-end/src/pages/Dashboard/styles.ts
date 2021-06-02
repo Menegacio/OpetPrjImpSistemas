@@ -6,6 +6,26 @@ export const Container = styled.div``;
 export const Header = styled.header`
     padding: 32px 0;
     background: ${shade(0.1, '#FFFFFF')};
+
+    ul {
+        display: flex;
+
+        li {
+            list-style: none;
+
+            a {
+                color: #ea0404;
+                font-family: sans-serif;
+                margin-right: 1rem;
+                text-decoration: none;
+                transition: opacity 0.2s;
+
+                &:hover {
+                    opacity: 0.8;
+                }
+            }
+        }
+    }
 `;
 
 export const HeaderContenter = styled.div`
@@ -31,7 +51,7 @@ export const HeaderContenter = styled.div`
     }
 `;
 
-export const Profile = styled.div`
+export const Menu = styled.div`
     display: flex;
     align-items: center;
     margin-left: 80px;
