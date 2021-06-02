@@ -40,7 +40,8 @@ class CreateUserService {
       username,
       password: hashedPassword,
       birth_date: userDate,
-      course_id
+      course_id,
+      approved: false
     });
 
     await userRepository.save(user);

@@ -33,6 +33,10 @@ class AutenticateUserService {
       throw new AppError('Incorrect username/password combination.', 401);
     }
 
+    if (!user.approved) {
+      throw new AppError('User does not have approved.', 401);
+    }
+
     const { secret, expiresIn } = authConfig.jwt;
 
     const token = sign({  }, secret, { subject: user.id, expiresIn });

@@ -23,6 +23,12 @@ class User {
     @Column('date')
     birth_date: Date;
 
+    @Column('boolean')
+    approved: boolean;
+
+    @Column('boolean')
+    isAdmin: boolean;
+
     @CreateDateColumn()
     created_at: Date;
 
